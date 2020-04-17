@@ -8,8 +8,7 @@ class BotController extends Controller
 {
     public function handle()
     {
-
-        $response = Telegram::getUpdates();
-
+        $updates = Telegram::getWebhookUpdates();
+        return 'ok';
     }
 }

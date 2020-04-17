@@ -20,12 +20,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::post('/bot', 'BotController@handle');
-
-$updates = Telegram::getWebhookUpdates();
-
-Route::post('/<token>/webhook', function () {
-    $updates = Telegram::getWebhookUpdates();
-
-    return 'ok';
-});
+Route::post('/webhook', 'BotController@handle');
