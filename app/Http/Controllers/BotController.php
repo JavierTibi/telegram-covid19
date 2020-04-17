@@ -32,8 +32,8 @@ class BotController extends Controller
         dd($response);
         */
 
-        file_get_contents("https://api.telegram.org/bot$token/sendMessage?" . http_build_query($data) );
-        
+        //file_get_contents("https://api.telegram.org/bot$token/sendMessage?" . http_build_query($data) );
+
         Telegram::sendMessage([
             'chat_id' => $response['message']['chat']['id'],
             'text' => 'Hello World'
