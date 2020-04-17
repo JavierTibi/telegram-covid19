@@ -19,6 +19,6 @@ class BotController extends Controller
 
         $messageId = $response->getMessageId();
 
-        return 'ok';
+        return $response;
     }
 }
