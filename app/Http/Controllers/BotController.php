@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 class BotController extends Controller
 {
-    public function getUpdate(Request $request)
+    public function handle()
     {
-        return "Hola";
+
+        $response = Telegram::getUpdates();
+
     }
 }

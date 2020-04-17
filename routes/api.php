@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,4 +20,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::post('/bot', 'BotController@getUpdate');
+Route::post('/bot', 'BotController@handle');
+
+$updates = Telegram::getWebhookUpdates();
+
+Route::post('/<token>/webhook', function () {
+    $updates = Telegram::getWebhookUpdates();
+
+    return 'ok';
+});
