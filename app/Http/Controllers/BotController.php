@@ -33,9 +33,9 @@ class BotController extends Controller
                         'Fallecidos: ' . $infoByCountry[0]->deaths . PHP_EOL .
                         'Recuperados: ' . $infoByCountry[0]->recovered . PHP_EOL . PHP_EOL .
                         'Datos del último día: ' . PHP_EOL .
-                        'Casos confirmados: ' . $lastDay['confirmed']  .  PHP_EOL .
-                        'Fallecidos: ' . $lastDay['deaths'] . PHP_EOL .
-                        'Recuperados: ' . $lastDay['recovered'] . PHP_EOL . PHP_EOL .
+                        'Casos confirmados: ' . $lastDay['confirmedLastDay']  .  PHP_EOL .
+                        'Fallecidos: ' . $lastDay['deathsLastDay'] . PHP_EOL .
+                        'Recuperados: ' . $lastDay['recoveredLastDay'] . PHP_EOL . PHP_EOL .
                         '¡Quedate en casa!'
                 ]);
             }
