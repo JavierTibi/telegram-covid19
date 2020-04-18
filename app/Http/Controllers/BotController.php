@@ -29,10 +29,10 @@ class BotController extends Controller
 
                 Telegram::sendMessage([
                     'chat_id' => $response['message']['chat']['id'],
-                    'text' => 'Datos de ' . $respCountry->name . ' hasta el momento:  %0A' .
-                        'Casos confirmados: ' . json_decode($content)[0]->confirmed . '. %0A' .
-                        'Fallecidos: ' . json_decode($content)[0]->deaths . '. %0A'.
-                        'Recuperados: ' . json_decode($content)[0]->recovered . '.  %0A'.
+                    'text' => 'Datos de ' . $respCountry->name . ' hasta el momento:  <br />' .
+                        'Casos confirmados: ' . json_decode($content)[0]->confirmed . '. <br />' .
+                        'Fallecidos: ' . json_decode($content)[0]->deaths . '. <br />'.
+                        'Recuperados: ' . json_decode($content)[0]->recovered . '. <br />'.
                         '¡Quedate en casa!'
                 ]);
             }
