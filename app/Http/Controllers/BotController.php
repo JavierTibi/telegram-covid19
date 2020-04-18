@@ -31,12 +31,14 @@ class BotController extends Controller
                     'text' => 'Datos de ' . $country->name . ' hasta el momento:  ' . PHP_EOL .
                         'Casos confirmados: ' . $infoByCountry[0]->confirmed  .  PHP_EOL .
                         'Fallecidos: ' . $infoByCountry[0]->deaths . PHP_EOL .
-                        'Recuperados: ' . $infoByCountry[0]->recovered . PHP_EOL . PHP_EOL .
+                        'Recuperados: ' . $infoByCountry[0]->recovered . PHP_EOL .
+                        'Tasa de Mortalidad: ' . $this->deathRate($infoByCountry[0]->confirmed, $infoByCountry[0]->deaths) . PHP_EOL . PHP_EOL .
+
                         'Datos del último día: ' . PHP_EOL .
                         'Casos confirmados: ' . $lastDay['confirmedLastDay']  .  PHP_EOL .
                         'Fallecidos: ' . $lastDay['deathsLastDay'] . PHP_EOL .
                         'Recuperados: ' . $lastDay['recoveredLastDay'] . PHP_EOL . PHP_EOL .
-                        '¡Quedate en casa!'
+                        '¡Quedate en casa!' 
                 ]);
             }
 
@@ -110,5 +112,16 @@ class BotController extends Controller
         ];
 
         return $result;
+    }
+
+    /**
+     * Get death rate
+     * @param $confirmed
+     * @param $deaths
+     * @return float|int
+     */
+    private function deathRate($confirmed, $deaths)
+    {
+        return $deaths / $confirmed;
     }
 }
