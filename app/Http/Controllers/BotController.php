@@ -13,7 +13,7 @@ class BotController extends Controller
         $client = new GuzzleHttp\Client();
 
         //Get Country
-        $country = $response[0]['message']['text'];
+        $country = $response['message']['text'];
         try {
             //API Countries
             $res = $client->get("https://restcountries.eu/rest/v2/name/" . $country);
@@ -39,7 +39,7 @@ class BotController extends Controller
 
         } catch (\Exception $exception) {
             Telegram::sendMessage([
-                'chat_id' => $response[0]['message']['chat']['id'],
+                'chat_id' => $response['message']['chat']['id'],
                 'text' => 'Lo sentimos no hemos encontrado ningun país con ese nombre. Intente nuevamente.'
             ]);
         }
