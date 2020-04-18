@@ -38,9 +38,11 @@ class BotController extends Controller
                         'Fallecidos: ' . $lastDay['deathsLastDay'] . PHP_EOL .
                         'Recuperados: ' . $lastDay['recoveredLastDay'] . PHP_EOL . PHP_EOL .
 
-                        'Tasa de Mortalidad: ' . $this->deathRate($infoByCountry[0]->confirmed, $infoByCountry[0]->deaths) . PHP_EOL . PHP_EOL .
+                        'Tasa de Mortalidad: ' . $this->deathRate($infoByCountry[0]->confirmed, $infoByCountry[0]->deaths) . '%' . PHP_EOL . PHP_EOL .
 
-                        '¡Quedate en casa!'
+                        '¡Quedate en casa!' . PHP_EOL . PHP_EOL . PHP_EOL .
+
+                        'Original Data source: Provisto por JHU CSSE. Las actualizaciones se hacen una vez al día, la información puede no estar actualizada al día de hoy.'
                 ]);
             }
 
