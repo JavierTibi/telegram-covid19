@@ -27,15 +27,13 @@ class BotController extends Controller
                 $res = $client->get("https://wuhan-coronavirus-api.laeyoung.endpoint.ainize.ai/jhu-edu/latest?iso2=$isoCountry&onlyCountries=true");
                 $content = $res->getBody()->getContents();
 
-                $text = urlencode('Datos de ' . $respCountry->name . ' hasta el momento:  ' .
-                    'Casos confirmados: ' . json_decode($content)[0]->confirmed . '<br />' .
-                    'Fallecidos: ' . json_decode($content)[0]->deaths . '<br />'.
-                    'Recuperados: ' . json_decode($content)[0]->recovered . '<br />'.
-                    '¡Quedate en casa!');
-
                 Telegram::sendMessage([
                     'chat_id' => $response['message']['chat']['id'],
-                    'text' => $text
+                    'text' => 'Datos de ' . $respCountry->name . ' hasta el momento:  ' . PHP_EOL .
+                        'Casos confirmados: ' . json_decode($content)[0]->confirmed  .  PHP_EOL .
+                        'Fallecidos: ' . json_decode($content)[0]->deaths . PHP_EOL .
+                        'Recuperados: ' . json_decode($content)[0]->recovered . PHP_EOL . PHP_EOL .
+                        '¡Quedate en casa!'
                 ]);
             }
 
