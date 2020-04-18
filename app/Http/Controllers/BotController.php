@@ -16,7 +16,7 @@ class BotController extends Controller
         $response = Telegram::getWebhookUpdates();
 
         //Get Country
-        $country = $response[0]['message']['text'];
+        $country = $response['message']['text'];
 
         try {
             $countries = $this->getCountries($country);
