@@ -17,46 +17,47 @@ class BotController extends Controller
         $response = Telegram::getWebhookUpdates();
 
         //Get Country
-        $country = $response['message']['text'];
+        $text = $response['message']['text'];
 
         try {
 
-            if (strlen($country) < 4) {
-                $countries = $this->getCoutryByCode($country);
+            if (strlen($text) < 4) {
+                $country = $this->getCoutryByCode($text);
             } else {
-                $countries = $this->getCountries($country);
+                $countries = $this->getCountries($text);
+                $country = $countries[0];
             }
 
-            foreach ($countries as $country) {
 
-                $infoByCountry = $this->getInfoByIsoCountry($country->alpha2Code);
 
-                $lastDay = $this->calculeLastDay($country->alpha2Code);
+            $infoByCountry = $this->getInfoByIsoCountry($country->alpha2Code);
 
-                $additionalInfo = '';
-                if($country->name == 'Argentina') {
-                    $additionalInfo = '¡Mirtha esta bien!';
-                }
+            $lastDay = $this->calculeLastDay($country->alpha2Code);
 
-                Telegram::sendMessage([
-                    'chat_id' => $response['message']['chat']['id'],
-                    'text' => 'Datos de ' . $country->name . ' hasta el momento:  ' . PHP_EOL .
-                        'Casos confirmados: ' . $infoByCountry[0]->confirmed  .  PHP_EOL .
-                        'Fallecidos: ' . $infoByCountry[0]->deaths . PHP_EOL .
-                        'Recuperados: ' . $infoByCountry[0]->recovered . PHP_EOL . PHP_EOL .
-
-                        'Datos del último día: ' . PHP_EOL .
-                        'Casos confirmados: ' . $lastDay['confirmedLastDay']  .  PHP_EOL .
-                        'Fallecidos: ' . $lastDay['deathsLastDay'] . PHP_EOL .
-                        'Recuperados: ' . $lastDay['recoveredLastDay'] . PHP_EOL . PHP_EOL .
-
-                        'Tasa de Mortalidad: ' . $this->deathRate($infoByCountry[0]->confirmed, $infoByCountry[0]->deaths) . '%' . PHP_EOL . PHP_EOL .
-
-                        '¡Quedate en casa!' . PHP_EOL . PHP_EOL . $additionalInfo .PHP_EOL . PHP_EOL .
-
-                        'Original Data source: Provisto por JHU CSSE. Las actualizaciones se hacen una vez al día, la información puede no estar actualizada al día de hoy.'
-                ]);
+            $additionalInfo = '';
+            if($country->name == 'Argentina') {
+                $additionalInfo = 'Tranqui, ¡Mirtha esta bien!';
             }
+
+            Telegram::sendMessage([
+                'chat_id' => $response['message']['chat']['id'],
+                'text' => 'Datos de ' . $country->name . ' hasta el momento:  ' . PHP_EOL .
+                    'Casos confirmados: ' . $infoByCountry[0]->confirmed  .  PHP_EOL .
+                    'Fallecidos: ' . $infoByCountry[0]->deaths . PHP_EOL .
+                    'Recuperados: ' . $infoByCountry[0]->recovered . PHP_EOL . PHP_EOL .
+
+                    'Datos del último día: ' . PHP_EOL .
+                    'Casos confirmados: ' . $lastDay['confirmedLastDay']  .  PHP_EOL .
+                    'Fallecidos: ' . $lastDay['deathsLastDay'] . PHP_EOL .
+                    'Recuperados: ' . $lastDay['recoveredLastDay'] . PHP_EOL . PHP_EOL .
+
+                    'Tasa de Mortalidad: ' . $this->deathRate($infoByCountry[0]->confirmed, $infoByCountry[0]->deaths) . '%' . PHP_EOL . PHP_EOL .
+
+                    '¡Quedate en casa! ' . $additionalInfo . PHP_EOL . PHP_EOL . PHP_EOL .
+
+                    'Original Data source: Provisto por JHU CSSE. Las actualizaciones se hacen una vez al día, la información puede no estar actualizada al día de hoy.'
+            ]);
+
 
         } catch (\Exception $exception) {
             Telegram::sendMessage([
