@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Collection;
 use Telegram\Bot\Laravel\Facades\Telegram;
 use GuzzleHttp;
+use Unirest;
 
 class BotController extends Controller
 {
@@ -19,12 +20,23 @@ class BotController extends Controller
         $country = $response['message']['text'];
 
         try {
-            $countries = $this->getCountries($country);
+
+            if (strlen($country) < 4) {
+                $countries = $this->getCoutryByCode($country);
+            } else {
+                $countries = $this->getCountries($country);
+            }
+
             foreach ($countries as $country) {
 
                 $infoByCountry = $this->getInfoByIsoCountry($country->alpha2Code);
 
                 $lastDay = $this->calculeLastDay($country->alpha2Code);
+
+                $additionalInfo = '';
+                if($country->name == 'Argentina') {
+                    $additionalInfo = '¡Mirtha esta bien!';
+                }
 
                 Telegram::sendMessage([
                     'chat_id' => $response['message']['chat']['id'],
@@ -40,7 +52,7 @@ class BotController extends Controller
 
                         'Tasa de Mortalidad: ' . $this->deathRate($infoByCountry[0]->confirmed, $infoByCountry[0]->deaths) . '%' . PHP_EOL . PHP_EOL .
 
-                        '¡Quedate en casa!' . PHP_EOL . PHP_EOL . PHP_EOL .
+                        '¡Quedate en casa!' . PHP_EOL . PHP_EOL . $additionalInfo .PHP_EOL . PHP_EOL .
 
                         'Original Data source: Provisto por JHU CSSE. Las actualizaciones se hacen una vez al día, la información puede no estar actualizada al día de hoy.'
                 ]);
@@ -49,9 +61,23 @@ class BotController extends Controller
         } catch (\Exception $exception) {
             Telegram::sendMessage([
                 'chat_id' => $response['message']['chat']['id'],
-                'text' => 'Lo sentimos no hemos encontrado ningun país con ese nombre. Intente nuevamente.'
+                'text' => 'Lo sentimos no hemos encontrado ningún país con ese nombre. Intente nuevamente con el código del país o el nombre en ingles.'
             ]);
         }
+    }
+
+
+    /**
+     * Get the country by codes through an API "Rest Countries"
+     * @param $code
+     * @return mixed
+     */
+    private function getCoutryByCode($code)
+    {
+        $client = new GuzzleHttp\Client();
+        $res = $client->get("https://restcountries.eu/rest/v2/alpha/" . $code);
+
+        return json_decode($res->getBody()->getContents());
     }
 
     /**
